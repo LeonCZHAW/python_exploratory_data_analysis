@@ -6,10 +6,12 @@ Run with:
 
 Local:      http://127.0.0.1:8000/docs
 Codespaces: https://<your-codespace-name>-8000.app.github.dev/docs
-            (use --host 0.0.0.0 so Codespaces port forwarding can reach the server)
+            (use --host 0.0.0.0 so Codespaces port forwarding
+            can reach the server)
 """
 
 import io
+from pathlib import Path
 from typing import Literal
 
 import matplotlib.pyplot as plt
@@ -17,10 +19,12 @@ import pandas as pd
 from fastapi import FastAPI, Query
 from fastapi.responses import Response
 
-plt.switch_backend('Agg')  # non-interactive backend for server-side rendering
+plt.switch_backend('Agg')  # Server-side rendering
 
 # Task 1: load dataset
-df = pd.read_csv('../../data/ev_charging_stations.csv')
+df = pd.read_csv(
+    Path(__file__).resolve().parents[2] / 'data/ev_charging_stations.csv'
+)
 NUM_COLS = ['power_kw', 'amperage', 'voltage']
 
 app = FastAPI(title='EV Charging Stations EDA API')
@@ -34,12 +38,16 @@ app = FastAPI(title='EV Charging Stations EDA API')
     summary='Return a PNG histogram for the selected variable',
 )
 def histogram(
-    variable: Literal['power_kw', 'amperage', 'voltage'] = Query(default='power_kw'),
+    variable: Literal['power_kw', 'amperage', 'voltage'] = Query(
+        default='power_kw'
+    ),
     bins: int = Query(default=30, ge=5, le=100),
 ):
     """Return a PNG histogram for the selected EV variable."""
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.hist(df[variable].dropna(), bins=bins, color='steelblue', edgecolor='white')
+    ax.hist(
+        df[variable].dropna(), bins=bins, color='steelblue', edgecolor='white'
+    )
     ax.set_xlabel(variable)
     ax.set_ylabel('Count')
     ax.set_title(f'Distribution of {variable}')
@@ -52,9 +60,13 @@ def histogram(
 
 
 # Task 3: summary statistics endpoint
-@app.get('/summary', summary='Return summary statistics for the selected variable')
+@app.get(
+    '/summary', summary='Return summary statistics for the selected variable'
+)
 def summary(
-    variable: Literal['power_kw', 'amperage', 'voltage'] = Query(default='power_kw'),
+    variable: Literal['power_kw', 'amperage', 'voltage'] = Query(
+        default='power_kw'
+    ),
 ):
     """Return mean, median, std, min and max for the selected variable."""
     stats = df[variable].agg(['mean', 'median', 'std', 'min', 'max']).round(2)

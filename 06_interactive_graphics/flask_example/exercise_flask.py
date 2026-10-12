@@ -1,7 +1,8 @@
 """
 Exercise: Flask — Swiss EV Charging Stations
 ============================================
-Build a Flask web app that serves interactive EDA charts for the EV charging stations dataset.
+Build a Flask web app that serves interactive EDA charts for the EV
+charging stations dataset.
 
 Run with:
     python exercise_flask.py
@@ -15,15 +16,18 @@ Tasks
 1. Load the EV charging stations dataset (../../data/ev_charging_stations.csv).
 2. Create a route GET / that renders an HTML page showing:
    - A dropdown to select a numerical variable (power_kw, amperage, voltage).
-   - A histogram of the selected variable, served as a base64-encoded PNG image.
-3. Create a route GET /summary that returns a JSON response with summary statistics
+   - A histogram of the selected variable, served as a base64-encoded
+PNG image.
+3. Create a route GET /summary that returns a JSON response with summary
+statistics
    (mean, median, std, min, max) for power_kw, amperage and voltage.
 4. Pass the number of bins as a query parameter ?bins=<int> (default: 30).
 
 Hints
 -----
 - Use matplotlib with the Agg backend to render plots server-side.
-- Encode the plot with base64 and embed it as <img src="data:image/png;base64,..."> in the template.
+- Encode the plot with base64 and embed it as <img
+src="data:image/png;base64,..."> in the template.
 - Use flask.request.args.get() to read query parameters.
 - Use flask.jsonify() to return JSON responses.
 """
@@ -36,7 +40,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from flask import Flask, jsonify, render_template_string, request
 
-plt.switch_backend('Agg')  # non-interactive backend for server-side rendering
+plt.switch_backend('Agg')  # Server-side rendering
 
 app = Flask(__name__)
 
@@ -53,12 +57,23 @@ HTML_TEMPLATE = """
   <form method="GET">
     <label>Variable:
       <select name="variable">
-        <option value="power_kw"  {% if variable == 'power_kw'  %}selected{% endif %}>power_kw</option>
-        <option value="amperage"  {% if variable == 'amperage'  %}selected{% endif %}>amperage</option>
-        <option value="voltage"   {% if variable == 'voltage'   %}selected{% endif %}>voltage</option>
+        <option value="power_kw"
+          {% if variable == 'power_kw'  %}selected{% endif %}>
+          power_kw
+        </option>
+        <option value="amperage"
+          {% if variable == 'amperage'  %}selected{% endif %}>
+          amperage
+        </option>
+        <option value="voltage"
+          {% if variable == 'voltage'   %}selected{% endif %}>
+          voltage
+        </option>
       </select>
     </label>
-    <label>Bins: <input type="number" name="bins" value="{{ bins }}" min="5" max="80"></label>
+    <label>Bins:
+      <input type="number" name="bins" value="{{ bins }}" min="5" max="80">
+    </label>
     <button type="submit">Update</button>
   </form>
   <br>
@@ -81,4 +96,4 @@ def summary():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

@@ -9,13 +9,14 @@ Codespaces: https://<your-codespace-name>-5000.app.github.dev
             (Flask binds to 0.0.0.0 via app.run(host='0.0.0.0'))
 """
 
-import os
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from flask import Flask, render_template
 
 # Set global Matplotlib style for dark background
+plt.switch_backend('Agg')
 plt.style.use('dark_background')
 
 # Initialize Flask app
@@ -25,7 +26,10 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     """Render the main dashboard with KPIs and a price histogram."""
-    df = pd.read_csv('../../data/apartments_data_enriched_cleaned.csv')
+    df = pd.read_csv(
+        Path(__file__).resolve().parents[2]
+        / 'data/apartments_data_enriched_cleaned.csv'
+    )
 
     mean_price = round(df['price'].mean(), 2)
     mean_area = round(df['area'].mean(), 2)
@@ -39,7 +43,8 @@ def index():
     plt.grid(color='gray', linestyle='--')
     plt.tick_params(colors='greenyellow')
 
-    histogram_path = os.path.join('static', 'price_histogram.png')
+    histogram_path = Path(app.static_folder) / 'price_histogram.png'
+    histogram_path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(histogram_path, bbox_inches='tight', transparent=True)
     plt.close()
 
@@ -49,11 +54,8 @@ def index():
         apartments=apartments,
         mean_price=mean_price,
         mean_area=mean_area,
-        histogram_path=histogram_path,
     )
 
 
 if __name__ == '__main__':
-    if not os.path.exists('static'):
-        os.makedirs('static')
     app.run(debug=True, host='0.0.0.0')

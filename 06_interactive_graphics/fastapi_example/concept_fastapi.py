@@ -7,10 +7,12 @@ Usage:
 
 Local:      http://127.0.0.1:8000/docs
 Codespaces: https://<your-codespace-name>-8000.app.github.dev/docs
-            (use --host 0.0.0.0 so Codespaces port forwarding can reach the server)
+            (use --host 0.0.0.0 so Codespaces port forwarding
+            can reach the server)
 """
 
 import io
+from pathlib import Path
 from typing import Literal
 
 import matplotlib.pyplot as plt
@@ -18,10 +20,13 @@ import pandas as pd
 from fastapi import FastAPI, Query
 from fastapi.responses import Response
 
-plt.switch_backend("Agg")  # non-interactive backend for server-side rendering
+plt.switch_backend("Agg")  # Server-side rendering
 
 # Load apartment data
-df = pd.read_csv("../../data/apartments_data_enriched_cleaned.csv")
+df = pd.read_csv(
+    Path(__file__).resolve().parents[2]
+    / "data/apartments_data_enriched_cleaned.csv"
+)
 
 app = FastAPI(title="Apartment Data EDA API")
 
@@ -38,11 +43,15 @@ def histogram(
     variable: Literal["price", "area", "rooms"] = Query(
         default="price", description="Variable to plot"
     ),
-    bins: int = Query(default=40, ge=5, le=150, description="Number of histogram bins"),
+    bins: int = Query(
+        default=40, ge=5, le=150, description="Number of histogram bins"
+    ),
 ):
     """Return a PNG histogram for the selected apartment variable."""
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.hist(df[variable].dropna(), bins=bins, color="steelblue", edgecolor="white")
+    ax.hist(
+        df[variable].dropna(), bins=bins, color="steelblue", edgecolor="white"
+    )
     ax.set_xlabel(variable.capitalize())
     ax.set_ylabel("Frequency")
     ax.set_title(f"Distribution of {variable.capitalize()}")
@@ -55,7 +64,9 @@ def histogram(
 
 
 @app.get("/summary", summary="Return summary statistics as JSON")
-def summary(variable: Literal["price", "area", "rooms"] = Query(default="price")):
+def summary(
+    variable: Literal["price", "area", "rooms"] = Query(default="price"),
+):
     """Return descriptive statistics for the selected variable."""
     stats = df[variable].describe().round(2).to_dict()
     return {"variable": variable, "statistics": stats}

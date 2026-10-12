@@ -1,0 +1,6 @@
+[FORMAT]
+max-line-length=79
+
+[MESSAGES CONTROL]
+# Concepts, exercises and solutions deliberately repeat teaching examples.
+disable=duplicate-code

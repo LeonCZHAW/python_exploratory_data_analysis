@@ -32,12 +32,11 @@ data/                               # Central data folder
 └── seaborn_for_eda.ipynb           # Seaborn high-level API and objects interface
 
 06_interactive_graphics/
-├── flask_matplotlib_example/       # Flask + Matplotlib: histogram served as image
-├── flask_apartment_data_example/   # Flask + pandas: apartment data web app
-├── fastapi_example/main.py         # FastAPI: histogram and summary statistics endpoints
-├── plotly_and_dash.ipynb           # Plotly Express + Dash data app
-├── streamlit_example/app.py        # Streamlit interactive EDA app
-└── exploring_spatial_data.ipynb    # Leaflet/Folium: interactive maps
+├── flask_example/                 # Flask + Matplotlib dashboards
+├── fastapi_example/               # Histogram and summary statistics endpoints
+├── plotly_example/                # Plotly notebooks and Dash example
+├── streamlit_example/             # Interactive EDA apps
+└── README.md                      # Commands to start concepts and solutions
 
 07_automated_eda/
 └── automated_eda.ipynb             # Data profiling (sweetviz),

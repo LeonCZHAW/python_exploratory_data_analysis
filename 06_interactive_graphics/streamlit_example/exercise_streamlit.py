@@ -16,7 +16,8 @@ Tasks
 2. Sidebar: add a multiselect widget to filter by power_type.
 3. Sidebar: add a slider to set the number of histogram bins (range 5-80).
 4. Show a histogram of power_kw using the selected number of bins.
-5. Show a bar chart of the top N cities (let the user choose N via a slider, range 5-20).
+5. Show a bar chart of the top N cities (let the user choose N via a
+slider, range 5-20).
 6. Show a scatter plot of voltage vs. amperage coloured by power_type.
 7. Show summary statistics (st.dataframe) for the filtered dataset.
 """
@@ -29,12 +30,12 @@ import streamlit as st
 
 sns.set_theme(style='whitegrid')
 
-# ── Data ──────────────────────────────────────────────────────────────────────
+# Data
 # Task 1: load ../../data/ev_charging_stations.csv
 # YOUR CODE HERE
 
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+# Sidebar
 st.sidebar.title('EDA Settings')
 
 # Task 2: multiselect for power_type
@@ -46,11 +47,11 @@ st.sidebar.title('EDA Settings')
 # Task 5: slider for top-N cities
 # YOUR CODE HERE
 
-# ── Filter ────────────────────────────────────────────────────────────────────
+# Filter
 # YOUR CODE HERE: filter df by selected power types
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# Main
 st.title('Swiss EV Charging Stations — Interactive EDA')
 
 # Task 1: shape + preview
